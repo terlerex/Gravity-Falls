@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class ButtonInteract : MonoBehaviour
 {
     [Header("Button to active teleport")] 
-    private bool isPressed; 
+    private bool isPressed;
     [SerializeField] private Text pressedText;
     [SerializeField] private GameObject teleporter;
     [SerializeField] private GameObject teleporter1;
     private GameObject target;
     private Camera _camera;
+    public AudioSource ButtonPress;
 
     private void Start()
     {
@@ -36,11 +37,13 @@ public class ButtonInteract : MonoBehaviour
         {
             if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 20))
             {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, 
+                    Color.yellow);
                 if(hit.transform.CompareTag("Button") && !isPressed)
                 {
                     if(hit.transform.name == "FirstButton")
                     {
+                        ButtonPress.Play();
                         teleporter.SetActive(true);
                         teleporter1.SetActive(true);
                         StartCoroutine(ButtonPressed());
@@ -59,4 +62,5 @@ public class ButtonInteract : MonoBehaviour
         yield return new WaitForSeconds(3);
         pressedText.enabled = false;
     }
+    
 }
